@@ -50,7 +50,7 @@ public class TheHindu {
 		if(firstEditorialLinkDoc!=null) {
 	        String firstEditorialLinkTitle = firstEditorialLinkDoc.title();
 	        firstEditorialMap.put("firstEditorialTitle", firstEditorialLinkTitle);
-	        Elements editlinks = firstEditorialLinkDoc.select("#content-body-14269002-31538103");
+	        Elements editlinks = firstEditorialLinkDoc.select("div[id^=content-body]");
 	        article =editlinks.select("p").text();
 	        firstEditorialMap.put("firstEditorialArticle",article);
 		}
@@ -69,7 +69,7 @@ public class TheHindu {
 		if(secondEditorialLinkDoc!=null) {
 	        String secondEditorialLinkTitle = secondEditorialLinkDoc.title();
 	        secondEditorialMap.put("secondEditorialTitle", secondEditorialLinkTitle);
-	        Elements editlinks = secondEditorialLinkDoc.select("#content-body-14269002-31538105");
+	        Elements editlinks = secondEditorialLinkDoc.select("div[id^=content-body]");
 	        article =editlinks.select("p").text();
 	        secondEditorialMap.put("secondEditorialArticle",article);
 		}
