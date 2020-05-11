@@ -6,7 +6,9 @@ import java.io.PrintWriter;
 public class TheHinduUtils {
 	
 	public void printHindu(TheHindu hinduObj) throws FileNotFoundException {
-		try (PrintWriter out = new PrintWriter("hindu.txt")) {
+		String defaultPath = "C:/Users/Shubham Roy/eclipse-workspace/The-Hindu-Editorials/src/main/resources/hindu.txt";
+		String desktopPath = System.getProperty("user.home") + "/Desktop"+"/hindu.txt";
+		try (PrintWriter out = new PrintWriter(desktopPath)) {
 			out.println(hinduObj.getHinduArticles().get("firstEditorialTitle"));
 			out.println("\n");
 			out.println(hinduObj.getHinduArticles().get("firstEditorialArticle"));
