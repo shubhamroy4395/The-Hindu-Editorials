@@ -8,14 +8,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.news.app.constants.NewsAppConstants;
+
 public class TheHindu {
 
 	public  Map<String, String> getHinduArticles(){
 		Map<String, String> hinduArticlesMap = new HashMap<String, String>();
-		String editorialURL = "https://www.thehindu.com/opinion/editorial/";
 		Document doc;
 	    try {
-	        doc = getDocument(editorialURL);
+	        doc = getDocument(NewsAppConstants.HINDU_URL);
 	        String firstURL = getFirstLink(doc);
 	        hinduArticlesMap.putAll(getFirstEditorial(firstURL));
 	        
@@ -28,14 +29,14 @@ public class TheHindu {
 	}
 	
 	private String getFirstLink(Document doc) {
-		  Elements links = doc.select("body > div.container-main > section:nth-child(3) > section.feature-news > div > div > div > div > div > div > div:nth-child(3) > h2 > a");
-	      return links.attr("href");
+		  Elements links = doc.select(NewsAppConstants.HINDU_FIRST_ARTICLE_URL_CSS_SELECTOR);
+	      return links.attr(NewsAppConstants.HREF);
 		
 	}
 	
 	private String getSecondLink(Document doc) {
-		Elements links = doc.select("body > div.container-main > section:nth-child(3) > section.feature-news > div > div > div > div > div > div > div:nth-child(4) > h2 > a");
-	      return links.attr("href");
+		Elements links = doc.select(NewsAppConstants.HINDU_SECOND_ARTICLE_URL_CSS_SELECTOR);
+	      return links.attr(NewsAppConstants.HREF);
 	}
 	
 	private Map<String, String> getFirstEditorial(String firstEditorialLink) {
@@ -48,11 +49,10 @@ public class TheHindu {
 			e.printStackTrace();
 		}
 		if(firstEditorialLinkDoc!=null) {
-	        String firstEditorialLinkTitle = firstEditorialLinkDoc.title();
-	        firstEditorialMap.put("firstEditorialTitle", firstEditorialLinkTitle);
-	        Elements editlinks = firstEditorialLinkDoc.select("div[id^=content-body]");
+	        firstEditorialMap.put(NewsAppConstants.FIRST_ARTICLE_TITLE, firstEditorialLinkDoc.title());
+	        Elements editlinks = firstEditorialLinkDoc.select(NewsAppConstants.HINDU_CONTENT_BODY_CSS_SELECTOR);
 	        article =editlinks.select("p").text();
-	        firstEditorialMap.put("firstEditorialArticle",article);
+	        firstEditorialMap.put(NewsAppConstants.FIRST_ARTICLE_BODY,article);
 		}
 	        return firstEditorialMap;
 	}
@@ -67,11 +67,10 @@ public class TheHindu {
 			e.printStackTrace();
 		}
 		if(secondEditorialLinkDoc!=null) {
-	        String secondEditorialLinkTitle = secondEditorialLinkDoc.title();
-	        secondEditorialMap.put("secondEditorialTitle", secondEditorialLinkTitle);
-	        Elements editlinks = secondEditorialLinkDoc.select("div[id^=content-body]");
+	        secondEditorialMap.put(NewsAppConstants.SECOND_ARTICLE_TITLE, secondEditorialLinkDoc.title());
+	        Elements editlinks = secondEditorialLinkDoc.select(NewsAppConstants.HINDU_CONTENT_BODY_CSS_SELECTOR);
 	        article =editlinks.select("p").text();
-	        secondEditorialMap.put("secondEditorialArticle",article);
+	        secondEditorialMap.put(NewsAppConstants.SECOND_ARTICLE_BODY,article);
 		}
 	        return secondEditorialMap;
 		
@@ -79,7 +78,7 @@ public class TheHindu {
 	
 	private Document getDocument(String url) throws IOException {
 		return Jsoup.connect(url)
-	    	     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+	    	     .userAgent(NewsAppConstants.JSOUP_USER_AGENT)
 	    	     .get();
 	}
 
