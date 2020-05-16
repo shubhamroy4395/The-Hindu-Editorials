@@ -12,6 +12,13 @@ public final class NewsAppConstants {
 	public static final String FIRST_ARTICLE_BODY = "firstEditorialArticle";
 	public static final String SECOND_ARTICLE_TITLE ="secondEditorialTitle";
 	public static final String SECOND_ARTICLE_BODY ="secondEditorialArticle";
+	public static final String HINDU_RSS_URL = "https://www.thehindu.com/opinion/editorial/feeder/default.rss";
+	public static final String LINK = "link";
+	public static final String FIRST_RSS_URL = "firstURL";
+	public static final String SECOND_RSS_URL = "secondUrl";
+	public static final String FIRST_RSS_PUBLISH_DATE = "firstPublishDate";
+	public static final String SECOND_RSS_PUBLISH_DATE = "secondPublishDate";
+	public static final String PUB_DATE = "pubdate";
 	
 	
 	

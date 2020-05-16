@@ -20,12 +20,12 @@ public class TheHinduUtils {
 		String desktopPath = System.getProperty("user.home") + "/Desktop"+"/hindu.txt";
 		System.out.println("Printing articles started...");
 		try (PrintWriter out = new PrintWriter(desktopPath)) {
-			out.println("created at : "+dateTime.format(formatter));
-			out.println("\n");
+			out.println(map.get(NewsAppConstants.FIRST_RSS_PUBLISH_DATE));
 			out.println(map.get(NewsAppConstants.FIRST_ARTICLE_TITLE));
 			out.println("\n");
 			out.println(map.get(NewsAppConstants.FIRST_ARTICLE_BODY));
 			out.println("\n\n\n\n");
+			out.println(map.get(NewsAppConstants.SECOND_RSS_PUBLISH_DATE));
 			out.println(map.get(NewsAppConstants.SECOND_ARTICLE_TITLE));
 			out.println("\n");
 		    out.println(map.get(NewsAppConstants.SECOND_ARTICLE_BODY));

@@ -14,73 +14,56 @@ import org.jsoup.select.Elements;
 import com.news.app.constants.NewsAppConstants;
 
 public class TheHindu {
-	
-	public static Map<String, String> getUrlFromRss() throws IOException {
-		Map<String, String> hinduUrlMap =  new HashMap<String, String>();
-		Document docRss = getDocument("https://www.thehindu.com/opinion/editorial/feeder/default.rss");
-		String myJXml = docRss.toString();
-		JSONObject jObject = XML.toJSONObject(myJXml);
-		JSONArray ob = jObject.getJSONObject("rss").getJSONObject("channel").getJSONArray("item");
-		
-		String firstUrl = ob.getJSONObject(0).getString("link");
-		String secondUrl = ob.getJSONObject(1).getString("link");
-		hinduUrlMap.put("firstURL", firstUrl);
-		hinduUrlMap.put("secondUrl", secondUrl);
-		return hinduUrlMap;	
-	}
 
 	public  Map<String, String> getHinduArticles() throws IOException{
 		Map<String, String> hinduArticlesMap = new HashMap<String, String>();
 		Map<String, String> urlMap = getUrlFromRss();
-		Document doc;
-	    try {
-	        doc = getDocument(NewsAppConstants.HINDU_URL);
-	        String firstURL = urlMap.get("firstURL");     //getLink(doc,NewsAppConstants.HINDU_FIRST_ARTICLE_URL_CSS_SELECTOR);
-	        hinduArticlesMap.putAll(getFirstEditorial(firstURL));
-	        
-	        String secondUrl = urlMap.get("secondUrl");                //getLink(doc,NewsAppConstants.HINDU_SECOND_ARTICLE_URL_CSS_SELECTOR);
-	        hinduArticlesMap.putAll(getSecondEditorial(secondUrl));
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	    }
+	    String firstURL = urlMap.get(NewsAppConstants.FIRST_RSS_URL);    
+	    hinduArticlesMap.put(NewsAppConstants.FIRST_RSS_PUBLISH_DATE, urlMap.get(NewsAppConstants.FIRST_RSS_PUBLISH_DATE));
+		hinduArticlesMap.putAll(getEditorial(firstURL,NewsAppConstants.FIRST_ARTICLE_TITLE,NewsAppConstants.FIRST_ARTICLE_BODY));
+		
+		String secondUrl = urlMap.get(NewsAppConstants.SECOND_RSS_URL);          
+		 hinduArticlesMap.put(NewsAppConstants.SECOND_RSS_PUBLISH_DATE, urlMap.get(NewsAppConstants.SECOND_RSS_PUBLISH_DATE));
+		hinduArticlesMap.putAll(getEditorial(secondUrl,NewsAppConstants.SECOND_ARTICLE_TITLE,NewsAppConstants.SECOND_ARTICLE_BODY));
 	    return hinduArticlesMap;
 	}
 	
-	private Map<String, String> getFirstEditorial(String firstEditorialLink) {
+	
+	private Map<String, String> getEditorial(String link, String title, String content){
 		Map<String, String> firstEditorialMap = new HashMap<String, String>();
 		  Document firstEditorialLinkDoc = null;
 		  String article = "";
 		try {
-			firstEditorialLinkDoc = getDocument(firstEditorialLink);
+			firstEditorialLinkDoc = getDocument(link);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		if(firstEditorialLinkDoc!=null) {
-	        firstEditorialMap.put(NewsAppConstants.FIRST_ARTICLE_TITLE, firstEditorialLinkDoc.title());
+	        firstEditorialMap.put(title, firstEditorialLinkDoc.title());
 	        Elements editlinks = firstEditorialLinkDoc.select(NewsAppConstants.HINDU_CONTENT_BODY_CSS_SELECTOR);
 	        article =editlinks.select("p").text();
-	        firstEditorialMap.put(NewsAppConstants.FIRST_ARTICLE_BODY,article);
+	        firstEditorialMap.put(content,article);
 		}
 	        return firstEditorialMap;
 	}
 	
-	private Map<String, String> getSecondEditorial(String url) {
-		Map<String, String> secondEditorialMap = new HashMap<String, String>();
-		  Document secondEditorialLinkDoc = null;
-		  String article = "";
-		try {
-			secondEditorialLinkDoc = getDocument(url);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		if(secondEditorialLinkDoc!=null) {
-	        secondEditorialMap.put(NewsAppConstants.SECOND_ARTICLE_TITLE, secondEditorialLinkDoc.title());
-	        Elements editlinks = secondEditorialLinkDoc.select(NewsAppConstants.HINDU_CONTENT_BODY_CSS_SELECTOR);
-	        article =editlinks.select("p").text();
-	        secondEditorialMap.put(NewsAppConstants.SECOND_ARTICLE_BODY,article);
-		}
-	        return secondEditorialMap;
+	
+	public static Map<String, String> getUrlFromRss() throws IOException {
+		Map<String, String> hinduUrlMap =  new HashMap<String, String>();
+		Document docRss = getDocument(NewsAppConstants.HINDU_RSS_URL);
+		String myJXml = docRss.toString();
+		JSONObject jObject = XML.toJSONObject(myJXml);
+		JSONArray ob = jObject.getJSONObject("rss").getJSONObject("channel").getJSONArray("item");
 		
+		JSONObject firstObject = ob.getJSONObject(0);
+		JSONObject secondObject = ob.getJSONObject(1);
+		
+		hinduUrlMap.put(NewsAppConstants.FIRST_RSS_URL, firstObject.getString(NewsAppConstants.LINK));
+		hinduUrlMap.put(NewsAppConstants.FIRST_RSS_PUBLISH_DATE,firstObject.getString(NewsAppConstants.PUB_DATE));
+		hinduUrlMap.put(NewsAppConstants.SECOND_RSS_URL, secondObject.getString(NewsAppConstants.LINK));
+		hinduUrlMap.put(NewsAppConstants.SECOND_RSS_PUBLISH_DATE,secondObject.getString(NewsAppConstants.PUB_DATE));
+		
+		return hinduUrlMap;	
 	}
 	
 	private static Document getDocument(String url) throws IOException {
