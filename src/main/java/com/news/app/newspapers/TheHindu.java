@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.XML;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,32 +14,36 @@ import org.jsoup.select.Elements;
 import com.news.app.constants.NewsAppConstants;
 
 public class TheHindu {
+	
+	public static Map<String, String> getUrlFromRss() throws IOException {
+		Map<String, String> hinduUrlMap =  new HashMap<String, String>();
+		Document docRss = getDocument("https://www.thehindu.com/opinion/editorial/feeder/default.rss");
+		String myJXml = docRss.toString();
+		JSONObject jObject = XML.toJSONObject(myJXml);
+		JSONArray ob = jObject.getJSONObject("rss").getJSONObject("channel").getJSONArray("item");
+		
+		String firstUrl = ob.getJSONObject(0).getString("link");
+		String secondUrl = ob.getJSONObject(1).getString("link");
+		hinduUrlMap.put("firstURL", firstUrl);
+		hinduUrlMap.put("secondUrl", secondUrl);
+		return hinduUrlMap;	
+	}
 
-	public  Map<String, String> getHinduArticles(){
+	public  Map<String, String> getHinduArticles() throws IOException{
 		Map<String, String> hinduArticlesMap = new HashMap<String, String>();
+		Map<String, String> urlMap = getUrlFromRss();
 		Document doc;
 	    try {
 	        doc = getDocument(NewsAppConstants.HINDU_URL);
-	        String firstURL = getFirstLink(doc);
+	        String firstURL = urlMap.get("firstURL");     //getLink(doc,NewsAppConstants.HINDU_FIRST_ARTICLE_URL_CSS_SELECTOR);
 	        hinduArticlesMap.putAll(getFirstEditorial(firstURL));
 	        
-	        String secondUrl = getSecondLink(doc);
+	        String secondUrl = urlMap.get("secondUrl");                //getLink(doc,NewsAppConstants.HINDU_SECOND_ARTICLE_URL_CSS_SELECTOR);
 	        hinduArticlesMap.putAll(getSecondEditorial(secondUrl));
 	    } catch (IOException e) {
 	        e.printStackTrace();
 	    }
 	    return hinduArticlesMap;
-	}
-	
-	private String getFirstLink(Document doc) {
-		  Elements links = doc.select(NewsAppConstants.HINDU_FIRST_ARTICLE_URL_CSS_SELECTOR);
-	      return links.attr(NewsAppConstants.HREF);
-		
-	}
-	
-	private String getSecondLink(Document doc) {
-		Elements links = doc.select(NewsAppConstants.HINDU_SECOND_ARTICLE_URL_CSS_SELECTOR);
-	      return links.attr(NewsAppConstants.HREF);
 	}
 	
 	private Map<String, String> getFirstEditorial(String firstEditorialLink) {
@@ -76,7 +83,7 @@ public class TheHindu {
 		
 	}
 	
-	private Document getDocument(String url) throws IOException {
+	private static Document getDocument(String url) throws IOException {
 		return Jsoup.connect(url)
 	    	     .userAgent(NewsAppConstants.JSOUP_USER_AGENT)
 	    	     .get();

@@ -1,6 +1,7 @@
 package com.news.app.newspapers;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +11,7 @@ import com.news.app.constants.NewsAppConstants;
 
 public class TheHinduUtils {
 	
-	public void printHindu(TheHindu hinduObj) throws FileNotFoundException {
+	public void printHindu(TheHindu hinduObj) throws IOException {
 		LocalDateTime dateTime = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 		Map<String, String> map = hinduObj.getHinduArticles();
