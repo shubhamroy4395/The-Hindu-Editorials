@@ -58,44 +58,5 @@ public class WordUtil {
 	        documentPart.addObject(p);
 	    }
 	
-	
-	
-	
-	
-	
-	
-//	public void writeToWord( Map<String, String> newsMap) {
-//		
-//		  String desktopPath = System.getProperty("user.home") + "/Desktop";
-//		  String fileName = "/The_Hindu.docx";
-//		  
-//		  WordprocessingMLPackage wordPackage = null;
-//		  
-//			try {
-//				LOG.info("Word document creation started");
-//				wordPackage = WordprocessingMLPackage.createPackage();
-//			} catch (InvalidFormatException e) {
-//				LOG.error("Could not initialize WordprocessingMLPackage", e);
-//			}
-//		
-//				MainDocumentPart mainDocumentPart = wordPackage.getMainDocumentPart();
-//				mainDocumentPart.addStyledParagraphOfText("Title", newsMap.get(NewsAppConstants.FIRST_ARTICLE_TITLE));
-//				mainDocumentPart.addParagraphOfText(newsMap.get(NewsAppConstants.FIRST_ARTICLE_BODY));
-//			
-//				mainDocumentPart.addStyledParagraphOfText("Title", newsMap.get(NewsAppConstants.SECOND_ARTICLE_TITLE));
-//				mainDocumentPart.addParagraphOfText(newsMap.get(NewsAppConstants.SECOND_ARTICLE_BODY));
-//				
-//				File exportFile = new File(desktopPath+fileName);
-//			try {
-//					wordPackage.save(exportFile);
-//					LOG.info("\nWord file succesfully exported to "+exportFile.getAbsolutePath());
-//				
-//				} catch (Docx4JException e) {
-//					
-//					LOG.error("Error in exporting word file to the path", e);
-//				}
-//	}
-	
-	
 
 }
