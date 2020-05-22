@@ -14,8 +14,8 @@ import org.jsoup.select.Elements;
 import com.news.app.constants.NewsAppConstants;
 
 public class TheHindu {
-
 	public  Map<String, String> getHinduArticles() throws IOException{
+		
 		Map<String, String> hinduArticlesMap = new HashMap<String, String>();
 		Map<String, String> urlMap = getUrlFromRss();
 	    String firstURL = urlMap.get(NewsAppConstants.FIRST_RSS_URL);    
@@ -29,7 +29,8 @@ public class TheHindu {
 	}
 	
 	
-	private Map<String, String> getEditorial(String link, String title, String content){
+	//puts title and article body in a map
+	private static Map<String, String> getEditorial(String link, String title, String content){
 		Map<String, String> firstEditorialMap = new HashMap<String, String>();
 		  Document firstEditorialLinkDoc = null;
 		  String article = "";
@@ -53,13 +54,22 @@ public class TheHindu {
 		Document docRss = getDocument(NewsAppConstants.HINDU_RSS_URL);
 		String myJXml = docRss.toString();
 		JSONObject jObject = XML.toJSONObject(myJXml);
-		JSONArray ob = jObject.getJSONObject("rss").getJSONObject("channel").getJSONArray("item");
+		JSONArray hinduJsonArray = jObject.getJSONObject("rss").getJSONObject("channel").getJSONArray("item");
+//		for(int i=0; i<hinduJsonArray.length(); i++) {
+//			JSONObject jobj = hinduJsonArray.getJSONObject(i);
+//			wordPackage= wordUtil.writeToWord(getEditorial(jobj.getString(NewsAppConstants.LINK),"title","content"));
+//		}
 		
-		JSONObject firstObject = ob.getJSONObject(0);
-		JSONObject secondObject = ob.getJSONObject(1);
+		
+		JSONObject firstObject = hinduJsonArray.getJSONObject(0);
+		JSONObject secondObject = hinduJsonArray.getJSONObject(1);
 		
 		hinduUrlMap.put(NewsAppConstants.FIRST_RSS_URL, firstObject.getString(NewsAppConstants.LINK));
 		hinduUrlMap.put(NewsAppConstants.FIRST_RSS_PUBLISH_DATE,firstObject.getString(NewsAppConstants.PUB_DATE));
+		
+		
+		
+		
 		hinduUrlMap.put(NewsAppConstants.SECOND_RSS_URL, secondObject.getString(NewsAppConstants.LINK));
 		hinduUrlMap.put(NewsAppConstants.SECOND_RSS_PUBLISH_DATE,secondObject.getString(NewsAppConstants.PUB_DATE));
 		
