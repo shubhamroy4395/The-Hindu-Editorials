@@ -1,13 +1,10 @@
 package com.news.app.utils;
 
-import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.exceptions.InvalidFormatException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
@@ -16,7 +13,6 @@ import org.docx4j.wml.Br;
 import org.docx4j.wml.ObjectFactory;
 import org.docx4j.wml.P;
 import org.docx4j.wml.R;
-import org.docx4j.wml.Text;
 
 import com.news.app.constants.NewsAppConstants;
 
@@ -26,7 +22,10 @@ public class WordUtil {
 	
 	public void writeToWord( Map<String, String> newsMap)throws InvalidFormatException, Docx4JException {
 	  String desktopPath = System.getProperty("user.home") + "/Desktop";
-	  String fileName = "/The_Hindu_Editorial.docx";
+	  
+	  DateTimeFormatter timeStampPattern = DateTimeFormatter.ofPattern("ddMMyyyy");
+      String timeForFile = timeStampPattern.format(LocalDateTime.now());
+      String fileName = "/The_Hindu_Editorial_"+timeForFile+".docx";
       WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
       LOG.info("Writing to doc file started");
 
